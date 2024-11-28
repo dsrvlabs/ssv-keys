@@ -34,7 +34,6 @@ class KeySharesAction extends BaseAction_1.BaseAction {
     }
     async execute() {
         this.validateKeystoreArguments(); // Validate keystore arguments
-        process.stdout.write(`${this.args.output_folder}`);
         const keySharesList = await this.processKeystorePath();
         const keySharesFilePath = await this.saveKeyShares(keySharesList, this.args.output_folder);
         return keySharesFilePath;
@@ -52,7 +51,7 @@ class KeySharesAction extends BaseAction_1.BaseAction {
         for (const file of files) {
             const isDir = (await fs_1.promises.stat(file)).isDirectory();
             let keystoreFile = file;
-            let keystorePassword = this.args.password;
+            let keystorePassword = await fs_1.promises.readFile(this.args.password, 'utf-8');
             if (isDir) {
                 const dir = await fs_1.promises.opendir(file);
                 for await (const dirent of dir) {
