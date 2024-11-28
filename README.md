@@ -91,7 +91,7 @@ To run you will use the "shares" command
 
 **Input parameters:**
 - keystore (ks) = The path to either a validator keystore file or a folder that contains multiple validator keystore files. If a folder is provided, it will split in bulk all the keystore files within it according to the additional arguments provided
-- password (ps) = The keystore file encryption password, if a folder was provided the password will be used for all keystore files in the folder
+- password (ps) = The keystore file encryption password. For one keystore, enter the absolute path. For multiple keystores, enter only the password file name.
 - operator-ids (oids) = Comma-separated list of operator IDs. The amount must be 3f+1 compatible
 - operator-keys (oks) = Comma-separated list of operator keys (same sequence as operator ids). The amount must be 3f+1 compatible
 - output-folder (of) = Target folder path to output the key shares file
@@ -99,11 +99,30 @@ To run you will use the "shares" command
 - owner-nonce (on) = The validator registration nonce of the account (owner address) within the SSV contract (increments after each validator registration), obtained using the ssv-scanner tool
 
 ```bash
+
+6 directories, 20 files
 # single file
-yarn cli shares --keystore=keystore.json --password=test --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
+yarn cli shares --keystore=./keystore.json --password=./password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 
 # folder with multiple keystore files
-yarn cli shares --keystore=./keystore-files --password=test --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
+## folder structure
+keystore_folders
+├── 0xe020....
+│   ├── keystore-m_12381_3600_1_0_0-1717971132.json
+│   └── password.txt
+├── 0xe025....
+│   ├── keystore-m_12381_3600_6_0_0-1717971134.json
+│   └── password.txt
+├── 0xe02a....
+│   ├── keystore-m_12381_3600_11_0_0-1717971135.json
+│   └── password.txt
+├── 0xe02f....
+│   ├── keystore-m_12381_3600_16_0_0-1717971137.json
+│   └── password.txt
+└── 0xe034....
+    ├── keystore-m_12381_3600_21_0_0-1717971139.json
+    └── password.txt
+yarn cli shares --keystore=./keystore_folders --password=password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 ```
 
 **Output:**  Name will start with keyshares-timestamp.json
