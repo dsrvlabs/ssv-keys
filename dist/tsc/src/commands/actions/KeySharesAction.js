@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.KeySharesAction = void 0;
 const tslib_1 = require("tslib");
 const path_1 = tslib_1.__importDefault(require("path"));
+const fs_1 = require("fs");
 const BaseAction_1 = require("./BaseAction");
 const SSVKeys_1 = require("../../lib/SSVKeys");
 const KeySharesItem_1 = require("../../lib/KeyShares/KeySharesItem");
@@ -47,15 +48,27 @@ class KeySharesAction extends BaseAction_1.BaseAction {
         const keystorePath = (0, validators_1.sanitizePath)(String(this.args.keystore).trim());
         const { files } = await (0, file_helper_1.getKeyStoreFiles)(keystorePath);
         const validatedFiles = await this.validateKeystoreFiles(files);
-        const singleKeySharesList = await Promise.all(validatedFiles.map((file, index) => this.processFile(file, this.args.password, this.getOperators(), this.args.owner_address, this.args.owner_nonce + index)));
-        return singleKeySharesList;
+        const folder = await fs_1.promises.readdir(this.args.keystore); // 비동기 디렉토리 읽기
+        const singleKeySharesList = await Promise.all(validatedFiles.map(async (file, index) => {
+            const passwordTest = await fs_1.promises.readFile(`${this.args.keystore}/${folder[index]}/pw.txt`, 'utf-8');
+            // processFile의 결과를 반환합니다.
+            return await this.processFile(`${this.args.keystore}/${folder[index]}/${file}`, passwordTest, this.getOperators(), this.args.owner_address, this.args.owner_nonce + index);
+        }));
+        return singleKeySharesList; // KeySharesItem[] 타입 반환
     }
-    async validateKeystoreFiles(files) {
+    async validateKeystoreFiles(folders) {
         const validatedFiles = [];
         let failedValidation = 0;
-        for (const [index, file] of files.entries()) {
-            const isKeyStoreValid = await arguments_1.keystoreArgument.interactive.options.validate(file);
-            const isValidPassword = await validators_1.keystorePasswordValidator.validatePassword(this.args.password, file);
+        let files = [];
+        for (const [index, folder] of folders.entries()) {
+            // Read the keystore file and validate it
+            // Read folder and validate keystore files
+            files = await fs_1.promises.readdir(folder); // 비동기 디렉토리 읽기
+            const file = files.filter((file) => file.startsWith('keystore'))[0];
+            const password = await fs_1.promises.readFile(`${folder}/pw.txt`, 'utf-8');
+            const filePath = `${folder}/${file}`;
+            const isKeyStoreValid = await arguments_1.keystoreArgument.interactive.options.validate(filePath);
+            const isValidPassword = await validators_1.keystorePasswordValidator.validatePassword(password, filePath);
             let status = '✅';
             if (isKeyStoreValid === true && isValidPassword === true) {
                 validatedFiles.push(file);
@@ -65,7 +78,7 @@ class KeySharesAction extends BaseAction_1.BaseAction {
                 status = '❌';
             }
             const fileName = path_1.default.basename(file); // Extract the file name
-            process.stdout.write(`\r\n${index + 1}/${files.length} ${status} ${fileName}`);
+            process.stdout.write(`\r\n${index + 1}/${folders.length} ${status} ${fileName}`);
         }
         process.stdout.write(`\n\n${files.length - failedValidation} of ${files.length} keystore files successfully validated. ${failedValidation} failed validation`);
         process.stdout.write('\n');
