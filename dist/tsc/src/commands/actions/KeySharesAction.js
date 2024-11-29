@@ -51,8 +51,7 @@ class KeySharesAction extends BaseAction_1.BaseAction {
         for (const file of files) {
             const isDir = (await fs_1.promises.stat(file)).isDirectory();
             let keystoreFile = file;
-            let keystoreFile = '';
-            //let keystorePassword = await fsp.readFile(this.args.password, 'utf-8');
+            let keystorePassword = '';
             if (isDir) {
                 const dir = await fs_1.promises.opendir(file);
                 for await (const dirent of dir) {
@@ -63,6 +62,9 @@ class KeySharesAction extends BaseAction_1.BaseAction {
                         keystorePassword = await fs_1.promises.readFile(path_1.default.join(file, dirent.name), 'utf-8');
                     }
                 }
+            }
+            else {
+                keystorePassword = await fs_1.promises.readFile(this.args.password, 'utf-8');
             }
             keystoreSet.push({ keystoreFile, keystorePassword });
         }
