@@ -51,7 +51,8 @@ class KeySharesAction extends BaseAction_1.BaseAction {
         for (const file of files) {
             const isDir = (await fs_1.promises.stat(file)).isDirectory();
             let keystoreFile = file;
-            let keystorePassword = await fs_1.promises.readFile(this.args.password, 'utf-8');
+            let keystoreFile = '';
+            //let keystorePassword = await fsp.readFile(this.args.password, 'utf-8');
             if (isDir) {
                 const dir = await fs_1.promises.opendir(file);
                 for await (const dirent of dir) {
