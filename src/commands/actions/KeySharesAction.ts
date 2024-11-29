@@ -76,7 +76,6 @@ export class KeySharesAction extends BaseAction {
       const isDir = (await fsp.stat(file)).isDirectory();
       let keystoreFile = file;
       let keystorePassword = '';
-      //let keystorePassword = await fsp.readFile(this.args.password, 'utf-8');
 
       if (isDir) {
         const dir = await fsp.opendir(file);
@@ -88,6 +87,9 @@ export class KeySharesAction extends BaseAction {
             keystorePassword = await fsp.readFile(path.join(file, dirent.name), 'utf-8');
           }
         }
+      }
+      else {
+        keystorePassword = await fsp.readFile(this.args.password, 'utf-8');
       }
 
       keystoreSet.push({ keystoreFile, keystorePassword });
