@@ -30,7 +30,7 @@ Library and CLI to work with the ETH keystore file and extract latest validator 
 
 ## Option 1: Running an Executable (Recommended route)
 
-If you want to run a compiled version (easier option then CLI)
+If you want to run a compiled version (easier option than CLI)
 
 1. Go to the releases section: https://github.com/ssvlabs/ssv-keys/releases
 2. Select the latest release for the specific version of the CLI: `vX.Y.Z-v1` - for the first version of the contract, `vX.Y.Z-v2` - for second etc.
