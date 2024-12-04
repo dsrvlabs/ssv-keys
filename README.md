@@ -99,8 +99,6 @@ To run you will use the "shares" command
 - owner-nonce (on) = The validator registration nonce of the account (owner address) within the SSV contract (increments after each validator registration), obtained using the ssv-scanner tool
 
 ```bash
-
-6 directories, 20 files
 # single file
 yarn cli shares --keystore=./keystore.json --password=./password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 
