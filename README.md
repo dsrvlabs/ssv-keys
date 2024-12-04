@@ -105,7 +105,18 @@ To run you will use the "shares" command
 yarn cli shares --keystore=./keystore.json --password=./password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 
 # folder with multiple keystore files
-## folder structure
+## folder structure for keystore files with the same password
+keystore-files
+├── keystore1.json
+├── keystore2.json
+├── keystore3.json
+├── keystore4.json
+└── keystore5.json
+password.txt
+
+yarn cli shares --keystore=./keystore_files --password=./password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
+
+## folder structure for keystore files with diffent passwords
 keystore_folders
 ├── validator1
 │   ├── keystore.json
@@ -122,6 +133,7 @@ keystore_folders
 └── validator5
     ├── keystore.json
     └── password.txt
+
 yarn cli shares --keystore=./keystore_folders --password=password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 ```
 
