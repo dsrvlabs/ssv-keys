@@ -80,9 +80,7 @@ export class KeySharesAction extends BaseAction {
       if (isDir) {
         const dir = await fsp.opendir(file);
         for await (const dirent of dir) {
-          if (dirent.name.includes('keystore')) {
-            keystoreFile = path.join(file, dirent.name);
-          }
+          keystoreFile = path.join(file, dirent.name);
           if (dirent.name.includes(this.args.password)) {
             keystorePassword = await fsp.readFile(path.join(file, dirent.name), 'utf-8');
           }
@@ -96,8 +94,6 @@ export class KeySharesAction extends BaseAction {
     }
 
     const validatedFiles = await this.validateKeystoreFiles(keystoreSet);
-
-    process.stdout.write(validatedFiles[0].keystoreFile);
 
     const singleKeySharesList = await Promise.all(validatedFiles.map((keystore, index) =>
       this.processFile(keystore.keystoreFile, keystore.keystorePassword, this.getOperators(), this.args.owner_address, this.args.owner_nonce + index)
