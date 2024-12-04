@@ -107,20 +107,20 @@ yarn cli shares --keystore=./keystore.json --password=./password.txt --operator-
 # folder with multiple keystore files
 ## folder structure
 keystore_folders
-├── 0xe020....
-│   ├── keystore-m_12381_3600_1_0_0-1717971132.json
+├── validator1
+│   ├── keystore.json
 │   └── password.txt
-├── 0xe025....
-│   ├── keystore-m_12381_3600_6_0_0-1717971134.json
+├── validator2
+│   ├── keystore.json
 │   └── password.txt
-├── 0xe02a....
-│   ├── keystore-m_12381_3600_11_0_0-1717971135.json
+├── validator3
+│   ├── keystore.json
 │   └── password.txt
-├── 0xe02f....
-│   ├── keystore-m_12381_3600_16_0_0-1717971137.json
+├── validator4
+│   ├── keystore.json
 │   └── password.txt
-└── 0xe034....
-    ├── keystore-m_12381_3600_21_0_0-1717971139.json
+└── validator5
+    ├── keystore.json
     └── password.txt
 yarn cli shares --keystore=./keystore_folders --password=password.txt --operator-ids=1,2,3,4 --operator-keys=LS..,LS..,LS..,LS.. --output-folder=./ --owner-address=... --owner-nonce=..
 ```
